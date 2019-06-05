@@ -68,16 +68,34 @@ bot.onText(/\/macrisis/, (msg) => {
 
 bot.on('message', (msg) => {
   // Don't answer to commands.
-  if(msg.text.startsWith("/"))
-    return;
   console.log(msg);
+  const chatId = msg.chat.id;
   // Only answer some times.
-  if(msg.from.username === "ClaryC")
+  if("new_chat_members" in msg) {
+    bot.sendMessage(chatId, 'El nuevo pasa pack ;)');
     return;
+  }
+  if(msg.from && msg.from.username === "ClaryC")
+    return;
+  if(msg.text && msg.text.startsWith("/"))
+    return;
+  if(msg.chat.type === "private") {
+    if("text" in msg) {
+      bot.sendMessage(-1001211558559, "*Mensaje Anonimizado:* " + msg.text, {parse_mode: "Markdown"}); 
+    }
+    if("photo" in msg) {
+      bot.sendMessage(-1001211558559, "*Foto Anonimizada:* ", {parse_mode: "Markdown"});
+      bot.sendPhoto(-1001211558559, msg.photo[msg.photo.length - 1].file_id);
+    }
+    if("video" in msg) {
+      bot.sendMessage(-1001211558559, "*Video Anonimizado:* ", {parse_mode: "Markdown"});
+      bot.sendVideo(-1001211558559, msg.video.file_id);
+    }
+    return;
+  }
   if(Math.random() > p)
     return;
 
-  const chatId = msg.chat.id;
 
   if(msg.from.username.toLowerCase() in respuestas_especificas)
     respuestas = respuestas_especificas[msg.from.username.toLowerCase()];
@@ -86,14 +104,6 @@ bot.on('message', (msg) => {
 
   respuesta = respuestas[Math.floor(Math.random()*respuestas.length)];
   bot.sendMessage(chatId, respuesta, {reply_to_message_id: msg.message_id});
-});
-
-
-bot.on('new_chat_members', (msg) => {
-  const chatId = msg.chat.id;
-
-  // send a message to the chat acknowledging receipt of their message
-  bot.sendMessage(chatId, 'El nuevo pasa pack ;)');
 });
 
 
