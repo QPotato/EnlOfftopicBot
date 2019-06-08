@@ -1,0 +1,16 @@
+{
+  "name": "mapbot.js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "author": "QuanticPotato",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^3.2.7",
+    "node-telegram-bot-api": "^0.30.0",
+    "request": "^2.88.0"
+  }
+}
