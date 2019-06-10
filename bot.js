@@ -3,68 +3,17 @@ const TelegramBot = require('node-telegram-bot-api');
 const MongoClient = require('mongodb').MongoClient;
 const Request = require("request");
 
+const commands = require("./commands");
 
-const telegramtoken = process.env.TELEGRAM
-const brcatoken = process.env.BCRA
+const telegramtoken = process.env.TELEGRAM;
+const brcatoken = process.env.BCRA;
 const mongourl = process.env.MONGO;
 const bot = new TelegramBot(telegramtoken, {polling: true});
 const p = 0.01;
  
-
-bot.onText(/\/cancionero/, (msg) => {
-  // Send a random ENL song
-  const chatId = msg.chat.id;
-  const cancion = canciones[Math.floor(Math.random()*canciones.length)];
-
-  console.log(cancion);
-  bot.sendMessage(chatId, cancion, {parse_mode: "Markdown"});
+commands.forEach(cmd => {
+  bot.onText(cmd.pattern, cmd.action);
 });
-
-
-bot.onText(/\/redditpics (.+)/, (msg, match) => {
-  // Send random pics from last posts on given subreddit.
-  const chatId = msg.chat.id;
-  const url = "https://www.reddit.com/r/" + match[1] + "/hot.json";
-  Request.get(url, (error, response, body) => {
-    if(error) {
-      return console.log(error);
-    }
-    const sub = JSON.parse(body);
-    if('data' in sub) {
-      const posts = sub.data.children;
-      const links = posts
-                .filter((p) => p.kind === "t3")
-                .map((p) => p.data.url)
-  
-      bot.sendMessage(chatId, links[Math.floor(Math.random()*links.length)]);
-    }
-  });
-});
-
-
-bot.onText(/\/macrisis/, (msg) => {
-  const chatId = msg.chat.id;
-  const url = "https://api.estadisticasbcra.com/usd_of_minorista";
-  Request.get(url, {headers: {Authorization: "BEARER " + brcatoken}}, (error, response, body) => {
-    if(error) {
-      return console.log(error);
-    }
-    const cotizaciones = JSON.parse(body);
-    dolar = cotizaciones[cotizaciones.length - 1].v
-
-    const url2 = "https://api.estadisticasbcra.com/tasa_leliq"; 
-    Request.get(url2, {headers: {Authorization: "BEARER " + brcatoken}}, (error, response, body) => {
-      if(error) {
-        return console.log(error);
-      }
-      const tasas = JSON.parse(body);
-      leliq = tasas[tasas.length - 1].v
-  
-      bot.sendMessage(chatId, `Dolar: $${dolar}\nLELIQs: ${leliq}%`);
-    });
-  });
-});
-
 
 bot.on('message', (msg) => {
   // Don't answer to commands.
@@ -153,6 +102,3 @@ const mensajes_idle = [
   "Ojala entrara algún nuevo...\n\n Así pasa pack.",
   "Me siento solo. Kari pensará en mi?",
 ];
-
-
-const canciones = fs.readFileSync('cancionero.txt', 'utf8').split('\n\n');
