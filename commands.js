@@ -41,7 +41,7 @@ var commands = [
                         const links = posts
                             .filter((p) => p.kind === "t3")
                             .map((p) => p.data.url)
-                        if (links) {
+                        if (links.length > 0) {
                             bot.sendMessage(chatId, links[Math.floor(Math.random() * links.length)]);
                         }
                         else {
