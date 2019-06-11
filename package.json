@@ -18,17 +18,19 @@
     "node": "8.11.4"
   },
   "dependencies": {
+    "@types/mongodb": "^3.1.28",
+    "@types/node": "^12.0.7",
+    "@types/node-telegram-bot-api": "^0.31.0",
+    "@types/request-promise": "^4.1.44",
     "mongodb": "^3.2.7",
     "node-telegram-bot-api": "^0.30.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "@types/mongodb": "^3.1.28",
-    "@types/node": "^12.0.7",
-    "@types/node-telegram-bot-api": "^0.31.0",
-    "@types/request-promise": "^4.1.44"
+    "typescript": "^3.5.1"
   },
   "devDependencies": {
     "prettier": "^1.18.2",
+    "tslint": "^5.17.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.0.1"
   }
