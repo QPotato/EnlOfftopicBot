@@ -44,7 +44,7 @@ const reactions: Reaction[] = [
     action: (msg) => {
       const chatId = msg.chat.id;
       const respuestas = msg.from.username.toLowerCase() in respuestas_especificas ?
-        respuestas_especificas[msg.from.username.toLowerCase()] + respuestas_random
+        respuestas_especificas[msg.from.username.toLowerCase()].concat(respuestas_random)
         : respuestas_random;
       const respuesta = respuestas[Math.floor(Math.random() * respuestas.length)];
       bot.sendMessage(chatId, respuesta, { reply_to_message_id: msg.message_id });
