@@ -2,16 +2,24 @@
     Bot commands, exported a list.
 */
 
-const fs = require('fs');
-const TelegramBot = require('node-telegram-bot-api');
-const request = require("request-promise");
+import * as FS from 'fs';
+import * as TelegramBot from 'node-telegram-bot-api';
+import * as request from 'request-promise';
+
+interface Command {
+    name: string;
+    help: string;
+    pattern: RegExp;
+    action: (msg: TelegramBot.Message, match: RegExpExecArray) => void;
+}
+
 
 const telegramtoken = process.env.TELEGRAM;
 const brcatoken = process.env.BCRA;
 const bot = new TelegramBot(telegramtoken);
 
-const canciones = fs.readFileSync('cancionero.txt', 'utf8').split('\n\n');
-var commands = [
+const canciones = FS.readFileSync('cancionero.txt', 'utf8').split('\n\n');
+var commands: Command[] = [
     {
         name: "cancionero",
         help: "Envía una canción de cancha iluminada al azar.",
@@ -69,8 +77,8 @@ var commands = [
                 request(url_dolar, { headers: { Authorization: "BEARER " + brcatoken } }),
                 request(url_leliqs, { headers: { Authorization: "BEARER " + brcatoken } })
             ]).then((values) => {
-                values = values.map((body) => JSON.parse(body).pop().v);
-                bot.sendMessage(chatId, `Dolar: $${values[0]} (último cierre)\nLELIQs: ${values[1]}%`);
+                let values2 = values.map((body) => JSON.parse(body).pop().v);
+                bot.sendMessage(chatId, `Dolar: $${values2[0]} (último cierre)\nLELIQs: ${values2[1]}%`);
             }).catch((error) => {
                 console.log(error);
                 bot.sendMessage(chatId, "Error de comunicación con el Banco Central.");
@@ -84,7 +92,6 @@ commands.push({
     help: "Ayuda sobre los comandos del bot.",
     pattern: /\/help/,
     action: (msg) => {
-        // Send a random ENL song
         const chatId = msg.chat.id;
         const lines = commands.map((cmd) => `/${cmd.name}: ${cmd.help}\n`);
 
@@ -97,4 +104,4 @@ if (require.main === module) {
     console.log(commands.map((cmd) => `${cmd.name} - ${cmd.help}\n`).join(""));
 }
 
-module.exports = commands
+export default commands;

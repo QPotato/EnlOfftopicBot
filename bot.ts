@@ -1,14 +1,11 @@
-const fs = require('fs');
-const TelegramBot = require('node-telegram-bot-api');
-const MongoClient = require('mongodb').MongoClient;
-const Request = require("request");
-
-const commands = require("./commands");
+import * as TelegramBot from 'node-telegram-bot-api';
+import * as MongoClient from 'mongodb';
+import commands from './commands'
 
 const telegramtoken = process.env.TELEGRAM;
-const brcatoken = process.env.BCRA;
 const mongourl = process.env.MONGO;
 const bot = new TelegramBot(telegramtoken, { polling: true });
+
 const p = 0.01;
 
 commands.forEach(cmd => {
@@ -50,12 +47,13 @@ bot.on('message', (msg) => {
   if (Math.random() > p)
     return;
 
+  let respuestas: string[];
   if (msg.from.username.toLowerCase() in respuestas_especificas)
     respuestas = respuestas_especificas[msg.from.username.toLowerCase()];
   else
     respuestas = respuestas_random;
 
-  respuesta = respuestas[Math.floor(Math.random() * respuestas.length)];
+  let respuesta = respuestas[Math.floor(Math.random() * respuestas.length)];
   bot.sendMessage(chatId, respuesta, { reply_to_message_id: msg.message_id });
 });
 
