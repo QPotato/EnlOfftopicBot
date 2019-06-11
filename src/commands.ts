@@ -51,8 +51,8 @@ var commands: Command[] = [
                     if ('data' in sub) {
                         const posts = sub.data.children;
                         const links = posts
-                            .filter((p) => p.kind === "t3")
-                            .map((p) => p.data.url)
+                            .filter((p: any) => p.kind === "t3")
+                            .map((p: any) => p.data.url)
                         if (links.length > 0) {
                             bot.sendMessage(chatId, links[Math.floor(Math.random() * links.length)]);
                         }
