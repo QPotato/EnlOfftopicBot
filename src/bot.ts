@@ -4,17 +4,17 @@ import * as MongoClient from 'mongodb';
 import commands from './commands';
 import reactions from './reactions'
 
-const telegramtoken = process.env.TELEGRAM;
-const mongourl = process.env.MONGO;
+const telegramtoken = process.env.TELEGRAM || "NoHayToken";
+const mongourl = process.env.MONGO|| "NoHayMongo";
 const bot = new TelegramBot(telegramtoken, { polling: true });
 
 
 // Bot should answer as a command if the text matches a command pattern.
-commands.forEach(cmd => {
+commands.forEach((cmd) => {
   bot.onText(cmd.pattern, cmd.action);
 });
 
-bot.on('message', (msg) => {
+bot.on('message', (msg: TelegramBot.Message) => {
   // We store all messages.
   MongoClient.connect(mongourl, function (err, client) {
     client.db("enlofftopic").collection('messages').insertOne(msg);

@@ -1,6 +1,6 @@
 import * as TelegramBot from 'node-telegram-bot-api';
 
-const telegramtoken = process.env.TELEGRAM;
+const telegramtoken = process.env.TELEGRAM || "NoToken";
 const bot = new TelegramBot(telegramtoken);
 
 interface Reaction {
@@ -11,12 +11,12 @@ interface Reaction {
 const reactions: Reaction[] = [
   {
     // don't answer to this user
-    pattern: (msg) => msg.from && msg.from.username === "ClaryC",
+    pattern: (msg) => msg.from !== undefined && msg.from.username === "ClaryC",
     action: (msg) => null
   },
   {
     // Don't answer to commands.
-    pattern: (msg) => msg.text && msg.text.startsWith("/"),
+    pattern: (msg) => msg.text !== undefined && msg.text.startsWith("/"),
     action: (msg) => null
   },
   {
@@ -30,6 +30,7 @@ const reactions: Reaction[] = [
     // Forward photos to Offtopic group anonymously.
     pattern: (msg) => msg.chat.type === "private" && "photo" in msg,
     action: (msg) => {
+      if(msg.photo === undefined) return; //TODO: find a better way to type this
       bot.sendMessage(-1001211558559, "*Foto Anonimizada:* ", { parse_mode: "Markdown" });
       bot.sendPhoto(-1001211558559, msg.photo[msg.photo.length - 1].file_id);
     }
@@ -38,15 +39,17 @@ const reactions: Reaction[] = [
     // Forward videos to Offtopic group anonymously.
     pattern: (msg) => msg.chat.type === "private" && "video" in msg,
     action: (msg) => {
+      if(msg.video === undefined) return; //TODO: find a better way to type this
       bot.sendMessage(-1001211558559, "*Video Anonimizado:* ", { parse_mode: "Markdown" });
       bot.sendVideo(-1001211558559, msg.video.file_id);
     }
   },
   {
     // If no other action, answer randomly 1 out 100 messages.
-    pattern: (msg) => Math.random() > p,
+    pattern: (msg) => Math.random() < p,
     action: (msg) => {
       const chatId = msg.chat.id;
+      if(msg.from === undefined || msg.from.username === undefined) return; //TODO: find a better way to type this
       const respuestas = msg.from.username.toLowerCase() in respuestas_especificas ?
         respuestas_especificas[msg.from.username.toLowerCase()].concat(respuestas_random)
         : respuestas_random;
@@ -58,15 +61,15 @@ const reactions: Reaction[] = [
 
 const p = 0.01;
 
-const respuestas_especificas = {
-  "potusito": ["No te respetas...", "No te estan regando lo suficiente, Potus."],
-  "caisaros": ["Callate Perez.", "Como las vacas en Perez?", "Frodo tiene razon.", "Este mensaje me dio pereza."],
-  "pansitopan": ["No, no, no. Bueno, sí.", "mmm, cereal."],
-  "quanticpotato": ["Tiene razón.", "Mi creador habla con sabiduría nuevamente.", "Escuchen a Fede, tiene razon.", "Yo estoy de acuerdo."],
-  "dimekari": ["Hola hermosa.", "Pasame pack Kari, quiero ver ese codigo.", "Apa, una linda bot. Hola, me llamo EnlOfftopicBot. Queres ver mi codigo?"]
+const respuestas_especificas: {[key: string] : string[]} = {
+  potusito: ["No te respetas...", "No te estan regando lo suficiente, Potus."],
+  caisaros: ["Callate Perez.", "Como las vacas en Perez?", "Frodo tiene razon.", "Este mensaje me dio pereza."],
+  pansitopan: ["No, no, no. Bueno, sí.", "mmm, cereal."],
+  quanticpotato: ["Tiene razón.", "Mi creador habla con sabiduría nuevamente.", "Escuchen a Fede, tiene razon.", "Yo estoy de acuerdo."],
+  dimekari: ["Hola hermosa.", "Pasame pack Kari, quiero ver ese codigo.", "Apa, una linda bot. Hola, me llamo EnlOfftopicBot. Queres ver mi codigo?"]
 };
 
-const respuestas_random = [
+const respuestas_random : string[] = [
   "Send nudes BB.",
   "Sí.",
   "No.",

@@ -10,12 +10,12 @@ interface Command {
     name: string;
     help: string;
     pattern: RegExp;
-    action: (msg: TelegramBot.Message, match: RegExpExecArray) => void;
+    action: (msg: TelegramBot.Message, match: RegExpExecArray | null) => void;
 }
 
 
-const telegramtoken = process.env.TELEGRAM;
-const brcatoken = process.env.BCRA;
+const telegramtoken = process.env.TELEGRAM || "NoHayToken";
+const brcatoken = process.env.BCRA || "NoHayToken";
 const bot = new TelegramBot(telegramtoken);
 
 const canciones = FS.readFileSync('cancionero.txt', 'utf8').split('\n\n');
@@ -40,6 +40,10 @@ var commands: Command[] = [
         action: (msg, match) => {
             // Send random pics from last posts on given subreddit.
             const chatId = msg.chat.id;
+            if (match === null) {
+                bot.sendMessage(chatId, "Tenes que pasarme el nombre de un subreddit despues del comando.", { reply_to_message_id: msg.message_id });
+                return;
+            }
             const url = "https://www.reddit.com/r/" + match[1] + "/hot.json";
             request(url)
                 .then((body) => {
