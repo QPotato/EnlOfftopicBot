@@ -20,12 +20,14 @@ const reactions: Reaction[] = [
     action: (msg) => null
   },
   {
+    // Forward plain text messages to Offtopic group anonymously.
     pattern: (msg) => msg.chat.type === "private" && "text" in msg,
     action: (msg) => {
       bot.sendMessage(-1001211558559, "*Mensaje Anonimizado:* " + msg.text, { parse_mode: "Markdown" });
     }
   },
   {
+    // Forward photos to Offtopic group anonymously.
     pattern: (msg) => msg.chat.type === "private" && "photo" in msg,
     action: (msg) => {
       bot.sendMessage(-1001211558559, "*Foto Anonimizada:* ", { parse_mode: "Markdown" });
@@ -33,6 +35,7 @@ const reactions: Reaction[] = [
     }
   },
   {
+    // Forward videos to Offtopic group anonymously.
     pattern: (msg) => msg.chat.type === "private" && "video" in msg,
     action: (msg) => {
       bot.sendMessage(-1001211558559, "*Video Anonimizado:* ", { parse_mode: "Markdown" });
@@ -40,6 +43,7 @@ const reactions: Reaction[] = [
     }
   },
   {
+    // If no other action, answer randomly 1 out 100 messages.
     pattern: (msg) => Math.random() > p,
     action: (msg) => {
       const chatId = msg.chat.id;
