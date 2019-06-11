@@ -2,6 +2,8 @@
     "compilerOptions": {
         "target": "es3",
         "watch": true,
-        "lib": ["es2017"]
+        "lib": ["es2017"],
+        "outDir": "dist",
+        "rootDir": "src",
     }
 }

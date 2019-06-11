@@ -60,3 +60,7 @@ typings/
 # next.js build output
 .next
 TOKEN
+bot.js
+commands.js
+reactions.js
+start.sh

@@ -2,9 +2,15 @@
   "name": "mapbot.js",
   "version": "1.0.0",
   "description": "",
-  "main": "bot.js",
+  "main": "dist/bot.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "npm run serve",
+    "build-ts": "tsc",
+    "postinstall": "npm run build-ts",
+    "serve": "node dist/bot.js",
+    "watch-node": "nodemon dist/bot.js",
+    "watch-ts": "tsc -w",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'"
   },
   "author": "QuanticPotato",
   "license": "ISC",
@@ -19,5 +25,8 @@
     "@types/request-promise": "^4.1.44"
   },
   "devDependencies": {
+    "prettier": "^1.18.2",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1"
   }
 }
