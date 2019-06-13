@@ -20,6 +20,10 @@ const reactions: Reaction[] = [
     action: (msg) => null
   },
   {
+    pattern: (msg) => 'new_chat_members' in msg,
+    action: (msg) => bot.sendMessage(msg.chat.id, 'El nuevo pasa pack ;) ;)')
+  },
+  {
     // Forward plain text messages to Offtopic group anonymously.
     pattern: (msg) => msg.chat.type === "private" && "text" in msg,
     action: (msg) => {
