@@ -3,6 +3,9 @@ import * as TelegramBot from 'node-telegram-bot-api';
 const telegramtoken = process.env.TELEGRAM || "NoToken";
 const bot = new TelegramBot(telegramtoken);
 
+const OT_CHAT_ID = -1001211558559;
+const p = 0.02;
+
 interface Reaction {
   pattern: (msg: TelegramBot.Message) => boolean;
   action: (msg: TelegramBot.Message) => void;
@@ -27,7 +30,7 @@ const reactions: Reaction[] = [
     // Forward plain text messages to Offtopic group anonymously.
     pattern: (msg) => msg.chat.type === "private" && "text" in msg,
     action: (msg) => {
-      bot.sendMessage(-1001211558559, "*Mensaje Anonimizado:* " + msg.text, { parse_mode: "Markdown" });
+      bot.sendMessage(OT_CHAT_ID, "*Mensaje Anonimizado:* " + msg.text, { parse_mode: "Markdown" });
     }
   },
   {
@@ -35,8 +38,8 @@ const reactions: Reaction[] = [
     pattern: (msg) => msg.chat.type === "private" && "photo" in msg,
     action: (msg) => {
       if(msg.photo === undefined) return; //TODO: find a better way to type this
-      bot.sendMessage(-1001211558559, "*Foto Anonimizada:* ", { parse_mode: "Markdown" });
-      bot.sendPhoto(-1001211558559, msg.photo[msg.photo.length - 1].file_id);
+      bot.sendMessage(OT_CHAT_ID, "*Foto Anonimizada:* ", { parse_mode: "Markdown" });
+      bot.sendPhoto(OT_CHAT_ID, msg.photo[msg.photo.length - 1].file_id);
     }
   },
   {
@@ -44,8 +47,8 @@ const reactions: Reaction[] = [
     pattern: (msg) => msg.chat.type === "private" && "video" in msg,
     action: (msg) => {
       if(msg.video === undefined) return; //TODO: find a better way to type this
-      bot.sendMessage(-1001211558559, "*Video Anonimizado:* ", { parse_mode: "Markdown" });
-      bot.sendVideo(-1001211558559, msg.video.file_id);
+      bot.sendMessage(OT_CHAT_ID, "*Video Anonimizado:* ", { parse_mode: "Markdown" });
+      bot.sendVideo(OT_CHAT_ID, msg.video.file_id);
     }
   },
   {
@@ -62,8 +65,6 @@ const reactions: Reaction[] = [
     },
   }
 ]
-
-const p = 0.01;
 
 const respuestas_especificas: {[key: string] : string[]} = {
   potusito: ["No te respetas...", "No te estan regando lo suficiente, Potus."],

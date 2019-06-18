@@ -19,7 +19,7 @@ const brcatoken = process.env.BCRA || "NoHayToken";
 const bot = new TelegramBot(telegramtoken);
 
 const canciones = FS.readFileSync('cancionero.txt', 'utf8').split('\n\n');
-var commands: Command[] = [
+const commands: Command[] = [
     {
         name: "cancionero",
         help: "Envía una canción de cancha iluminada al azar.",
