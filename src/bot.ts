@@ -7,6 +7,7 @@ import necromancy from './necromancy'
 
 
 const OT_NAC_CHAT_ID = -1001211558559;
+const OT_ROS_CHAT_ID = -1001302166698;
 
 
 const init = async () => {
@@ -40,9 +41,11 @@ const init = async () => {
 
     // If the OT chat dies, resurrect it.
     necromancy(OT_NAC_CHAT_ID);
+    necromancy(OT_ROS_CHAT_ID);
   });
 
 }
 
 init()
 
+OT_ROS_CHAT_ID

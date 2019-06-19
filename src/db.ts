@@ -10,7 +10,7 @@ class DbClient {
 
     public async connect() {
         let client = await MongoClient.connect(mongourl, { useNewUrlParser: true })
-        this.db = client.db('enlofftopictest') ;
+        this.db = client.db() ;
         return this.db;
     }
 }
