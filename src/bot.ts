@@ -1,18 +1,24 @@
 import * as TelegramBot from 'node-telegram-bot-api';
 
-import mongo from './db'
+import mongo from './db';
 import commands from './commands';
-import reactions from './reactions'
+import reactions from './reactions';
+import necromancy from './necromancy'
 
-if (process.env.TELEGRAM === undefined)
-  throw new Error('No telegram token in environment')
-const telegramtoken = process.env.TELEGRAM;
+
+const OT_NAC_CHAT_ID = -1001211558559;
+
 
 const init = async () => {
   // Connect the DB
   await mongo.connect();
   if (mongo.db === undefined)
     throw new Error('Could not connect to mongodb')
+
+  // Create the telegram bot
+  if (process.env.TELEGRAM === undefined)
+    throw new Error('No telegram token in environment');
+  const telegramtoken = process.env.TELEGRAM;
   const bot = new TelegramBot(telegramtoken, { polling: true });
   
   // Bot should answer as a command if the text matches a command pattern.
@@ -31,7 +37,11 @@ const init = async () => {
         break;
       }
     }
+
+    // If the OT chat dies, resurrect it.
+    necromancy(OT_NAC_CHAT_ID);
   });
+
 }
 
 init()

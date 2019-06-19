@@ -1,5 +1,5 @@
 /*
-    Bot commands, exported a list.
+    Bot commands, exported as a list.
 */
 
 import * as FS from 'fs';
@@ -13,10 +13,16 @@ interface Command {
     action: (msg: TelegramBot.Message, match: RegExpExecArray | null) => void;
 }
 
-
-const telegramtoken = process.env.TELEGRAM || "NoHayToken";
-const brcatoken = process.env.BCRA || "NoHayToken";
+// Create the telegram bot
+if (process.env.TELEGRAM === undefined)
+    throw new Error('No telegram token in environment');
+const telegramtoken = process.env.TELEGRAM;
 const bot = new TelegramBot(telegramtoken);
+
+// get BRCA token
+if (process.env.BCRA === undefined)
+    throw new Error('No BCRA token in environment');
+const brcatoken = process.env.BCRA;
 
 const canciones = FS.readFileSync('cancionero.txt', 'utf8').split('\n\n');
 const commands: Command[] = [
@@ -57,15 +63,15 @@ const commands: Command[] = [
                             bot.sendMessage(chatId, links[Math.floor(Math.random() * links.length)]);
                         }
                         else {
-                            bot.sendMessage(chatId, "No ecnontré ese subreddit o no hay links en los últimos posts.");
+                            bot.sendMessage(chatId, "No encontré ese subreddit o no hay links en los últimos posts.");
                         }
                     } else {
-                        bot.sendMessage(chatId, "No ecnontré ese subreddit o no hay links en los últimos posts.");
+                        bot.sendMessage(chatId, "No encontré ese subreddit o no hay links en los últimos posts.");
                     }
                 })
                 .catch((error) => {
                     console.log(error);
-                    bot.sendMessage(chatId, "No ecnontré ese subreddit o no hay links en los últimos posts.");
+                    bot.sendMessage(chatId, "No encontré ese subreddit o no hay links en los últimos posts.");
                 });
         }
     },
