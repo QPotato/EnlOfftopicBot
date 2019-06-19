@@ -39,11 +39,11 @@ const init = async () => {
       }
     }
 
-    // If the OT chat dies, resurrect it.
-    necromancy(OT_NAC_CHAT_ID);
-    necromancy(OT_ROS_CHAT_ID);
   });
 
+  // If the OT chat dies, resurrect it.
+  necromancy(OT_NAC_CHAT_ID);
+  necromancy(OT_ROS_CHAT_ID);
 }
 
 init()

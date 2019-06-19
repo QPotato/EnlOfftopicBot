@@ -37,19 +37,21 @@ const necroposts : Necropost[] = [
 
 const necromancy = async (chatId: number) => {
   // If it's late night time in Argentina, do nothing.
-  if((new Date()).getUTCHours() - 3 < 8)
-    return;
-
-  // If chat has recent activity, do nothing
-  // TODO: find better way of accesing this only message.
-  const last_message = mongo.db.collection('messages').find({chat: {id: chatId}}).sort({date: -1}).limit(1).forEach((msg) => {
-    if(Date.now() - msg.date < 5 * 60 * 60 * 1000)
+  (() => {
+    if((new Date()).getUTCHours() - 3 < 8)
       return;
-  });
 
-  // Choose a random necroposting function and execute it.
-  const necropost = necroposts[Math.floor(Math.random() * necroposts.length)];
-  necropost(chatId);
+    // If chat has recent activity, do nothing
+    // TODO: find better way of accesing this only message.
+    const last_message = mongo.db.collection('messages').find({chat: {id: chatId}}).sort({date: -1}).limit(1).forEach((msg) => {
+      if(Date.now() - msg.date > 5 * 60 * 60 * 1000)
+        return;
+    });
+
+    // Choose a random necroposting function and execute it.
+    const necropost = necroposts[Math.floor(Math.random() * necroposts.length)];
+    necropost(chatId);
+  })();
 
   // Set a timeout somewhere < 24 hours to practice necromancy again.
   await Timeout.set(Math.random() * 24 * 60 * 60 * 1000)
