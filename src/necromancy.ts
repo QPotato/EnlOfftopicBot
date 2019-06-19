@@ -43,7 +43,7 @@ const necromancy = async (chatId: number) => {
 
     // If chat has recent activity, do nothing
     // TODO: find better way of accesing this only message.
-    const last_message = mongo.db.collection('messages').find({chat: {id: chatId}}).sort({date: -1}).limit(1).forEach((msg) => {
+    const last_message = mongo.db.collection('messages').find({"chat.id": -1001302166698}).sort({date: -1}).limit(1).forEach((msg) => {
       if(Date.now() - msg.date > 5 * 60 * 60 * 1000)
         return;
     });
