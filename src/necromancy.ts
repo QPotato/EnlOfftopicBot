@@ -17,7 +17,6 @@ const mensajes_idle : string[] = [
   "Me aburro. Que hacen?",
   "Ojala entrara algún nuevo...\n\n Así pasa pack.",
   "Me siento solo. Kari pensará en mi?",
-  "Lo que pasa en un MD, se queda en el MD.",
   "Birra?",
   "Que bueno que nadie habla. Deben estar todos ocupados jugando Ingress, no?",
   "No mueras chat! Yo te revivire. NeCroPOsTiNG!!! WOOOOOSHHH!!",
@@ -37,16 +36,15 @@ const necroposts : Necropost[] = [
 
 const necromancy = async (chatId: number) => {
   // If it's late night time in Argentina, do nothing.
-  (() => {
+  await (async () => {
     if((new Date()).getUTCHours() - 3 < 8)
       return;
 
     // If chat has recent activity, do nothing
     // TODO: find better way of accesing this only message.
-    const last_message = mongo.db.collection('messages').find({"chat.id": -1001302166698}).sort({date: -1}).limit(1).forEach((msg) => {
-      if(Date.now() - msg.date > 5 * 60 * 60 * 1000)
-        return;
-    });
+    const lastMessage = await mongo.db.collection('messages').findOne({'chat.id': chatId}, {sort: {date: -1}});
+    if(Date.now() - lastMessage.date > 5 * 60 * 60 * 1000)
+      return;
 
     // Choose a random necroposting function and execute it.
     const necropost = necroposts[Math.floor(Math.random() * necroposts.length)];
