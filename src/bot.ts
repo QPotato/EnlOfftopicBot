@@ -1,10 +1,11 @@
 import * as TelegramBot from 'node-telegram-bot-api';
-
+import * as Schedule from 'node-schedule';
+ 
 import mongo from './db';
 import commands from './commands';
 import reactions from './reactions';
 import necromancy from './necromancy'
-
+import doDailies from './dailies'
 
 const OT_NAC_CHAT_ID = -1001211558559;
 const OT_ROS_CHAT_ID = -1001302166698;
@@ -44,6 +45,11 @@ const init = async () => {
   // If the OT chat dies, resurrect it.
   necromancy(OT_NAC_CHAT_ID);
   necromancy(OT_ROS_CHAT_ID);
+  
+  var rule = new Schedule.RecurrenceRule();
+  rule.hour = 11;
+  rule.minute = 0;
+  Schedule.scheduleJob(rule, doDailies, );
 }
 
 init()

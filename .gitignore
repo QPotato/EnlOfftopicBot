@@ -64,3 +64,4 @@ bot.js
 commands.js
 reactions.js
 start.sh
+dist/

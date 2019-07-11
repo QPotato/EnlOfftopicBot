@@ -67,11 +67,12 @@ const reactions: Reaction[] = [
 ]
 
 const respuestas_especificas: {[key: string] : string[]} = {
-  potusito: ["No te respetas...", "No te estan regando lo suficiente, Potus."],
+  potusito: ["No te respetas...", "No te estan regando lo suficiente, Potus.", "Maldito potus."],
   caisaros: ["Callate Perez.", "Como las vacas en Perez?", "Frodo tiene razon.", "Este mensaje me dio pereza."],
   pansitopan: ["No, no, no. Bueno, sí.", "mmm, cereal."],
   quanticpotato: ["Tiene razón.", "Mi creador habla con sabiduría nuevamente.", "Escuchen a Fede, tiene razon.", "Yo estoy de acuerdo."],
-  dimekari: ["Hola hermosa.", "Pasame pack Kari, quiero ver ese codigo.", "Apa, una linda bot. Hola, me llamo EnlOfftopicBot. Queres ver mi codigo?"]
+  dimekari: ["Hola hermosa.", "Pasame pack Kari, quiero ver ese codigo.", "Apa, una linda bot. Hola, me llamo EnlOfftopicBot. Queres ver mi codigo?"],
+  
 };
 
 const respuestas_random : string[] = [
