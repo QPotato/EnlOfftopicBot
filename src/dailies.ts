@@ -121,7 +121,8 @@ export default function doDailies() {
             dailyMotives = [caturday];
             break;
         case 7:
-            dailyMotives = [domingoRandom, dominGol]
+            dailyMotives = [domingoRandom, dominGol];
+            break;
         default:
             dailyMotives = [];
 
