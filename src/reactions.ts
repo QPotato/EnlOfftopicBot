@@ -64,7 +64,7 @@ const reactions: Reaction[] = [
       const respuestas = msg.from.username.toLowerCase() in respuestas_especificas ?
         respuestas_especificas[msg.from.username.toLowerCase()].concat(respuestas_random)
         : respuestas_random;
-      const respuesta = respuestas[Math.floor(Math.random() * respuestas.length)];
+      const respuesta = respuestas[Math.floor(Math.random() * respuestas.length)].replace("%firt_name", msg.from.first_name);
       bot.sendMessage(chatId, respuesta, { reply_to_message_id: msg.message_id });
     },
   }
@@ -100,7 +100,11 @@ const respuestas_random : string[] = [
   "Y si mejor te callás?",
   "Podemos armar otro grupo sin esta persona?",
   "Ignoren este mensaje y capaz se aburre.",
-  "Vos le escribís las letras a Arjona?"
+  "Vos le escribís las letras a Arjona?",
+  "Kari mata a %first_name",
+  "Nunca conocí a alguien mas pavo %first_name",
+  "Podemos sacar del grupo a %first_name?",
+  "Quien metio a %first_name en este grupo?"
 ]
 
 function numReact(str: string | undefined) {
