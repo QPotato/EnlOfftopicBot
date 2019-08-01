@@ -27,6 +27,10 @@ const reactions: Reaction[] = [
     action: (msg) => bot.sendMessage(msg.chat.id, 'El nuevo pasa pack ;) ;)')
   },
   {
+    pattern: (msg) => msg.text !== undefined && Boolean(numReact(msg.text)),
+    action:  (msg) => bot.sendMessage(OT_CHAT_ID, numReact(msg.text)),
+  },
+  {
     // Forward plain text messages to Offtopic group anonymously.
     pattern: (msg) => msg.chat.type === "private" && "text" in msg,
     action: (msg) => {
@@ -98,5 +102,19 @@ const respuestas_random : string[] = [
   "Ignoren este mensaje y capaz se aburre.",
   "Vos le escribís las letras a Arjona?"
 ]
+
+function numReact(str: string | undefined) {
+  if (str === undefined) {
+    return "";
+  }
+  if(["nueve", "9"].some((n) => str.includes(n))) {
+    return "el culo te llueve";
+  } else if(["ocho", "8"].some((n) => str.includes(n))) {
+    return "el culo te abrocho";
+  }
+  else return "";
+}
+
+
 
 export default reactions

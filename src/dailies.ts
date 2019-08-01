@@ -22,11 +22,15 @@ const lunesAlFin: DailyMotive = {
     action: () => simpleMessage("Hora de volvernos miembros productivos de la sociedad de nuevo. Una sonsira y a producir.")
 };
 
+// const lunesDeLucio: DailyMotive = {
+//     name: "Lunes de Lucio",
+//     action: () => 
+// };
+
 const martesDeMusica: DailyMotive = {
     name: "Martes de Música 🎵",
     action: () => sendSubLinks("listentothis")
 };
-
 
 const martesDecolores: DailyMotive = {
     name: "Martes De Colores",
@@ -81,6 +85,16 @@ const dominGol: DailyMotive = {
     action: () => sendSubLinks("soccer")
 };
 
+const juanDomingoPeron: DailyMotive = {
+    name: "Juan Domingo Peron",
+    action: () => bot.sendAudio(OT_CHAT_ID, "marcha.mp3")
+};
+
+const domingoDeHuevos: DailyMotive = {
+    name: "Domingo de Huevos",
+    action: () => sendSubLinks("nutscaping")
+};
+
 const sendSubLinks = async (sub: string) => {
     const url = 'https://www.reddit.com/r/' + sub + '/hot.json';
     try {
@@ -121,7 +135,7 @@ export default function doDailies() {
             dailyMotives = [caturday];
             break;
         case 7:
-            dailyMotives = [domingoRandom, dominGol];
+            dailyMotives = [domingoRandom, dominGol, juanDomingoPeron, domingoDeHuevos];
             break;
         default:
             dailyMotives = [];
