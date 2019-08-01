@@ -1,9 +1,9 @@
 import { MongoClient, Db } from "mongodb";
 
-if (process.env.MONGO === undefined)
+if (process.env.MONGO_URL === undefined)
   throw new Error('No mongo url in environment')
   
-const mongourl = process.env.MONGO;
+const mongourl = process.env.MONGO_URL;
 class DbClient {
 
     public db!: Db;
