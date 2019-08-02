@@ -27,8 +27,8 @@ const reactions: Reaction[] = [
     action: (msg) => bot.sendMessage(msg.chat.id, 'El nuevo pasa pack ;) ;)')
   },
   {
-    pattern: (msg) => msg.text !== undefined && Boolean(numReact(msg.text)),
-    action:  (msg) => bot.sendMessage(OT_CHAT_ID, numReact(msg.text)),
+    pattern: (msg) => msg.text !== undefined && Boolean(numReact(msg.text) && Math.random() < 0.4),
+    action:  (msg) => bot.sendMessage(msg.chat.id, numReact(msg.text), { reply_to_message_id: msg.message_id }),
   },
   {
     // Forward plain text messages to Offtopic group anonymously.
@@ -64,7 +64,7 @@ const reactions: Reaction[] = [
       const respuestas = msg.from.username.toLowerCase() in respuestas_especificas ?
         respuestas_especificas[msg.from.username.toLowerCase()].concat(respuestas_random)
         : respuestas_random;
-      const respuesta = respuestas[Math.floor(Math.random() * respuestas.length)].replace("%firt_name", msg.from.first_name);
+      const respuesta = respuestas[Math.floor(Math.random() * respuestas.length)].replace("%first_name", msg.from.first_name);
       bot.sendMessage(chatId, respuesta, { reply_to_message_id: msg.message_id });
     },
   }
@@ -100,21 +100,30 @@ const respuestas_random : string[] = [
   "Y si mejor te callás?",
   "Podemos armar otro grupo sin esta persona?",
   "Ignoren este mensaje y capaz se aburre.",
-  "Vos le escribís las letras a Arjona?",
   "Kari mata a %first_name",
-  "Nunca conocí a alguien mas pavo %first_name",
-  "Podemos sacar del grupo a %first_name?",
-  "Quien metio a %first_name en este grupo?"
+  "Nunca conocí a alguien mas pavo que %first_name",
+  "¿Podemos sacar del grupo a %first_name?",
+  "¿Quien metió a %first_name en este grupo?"
 ]
 
 function numReact(str: string | undefined) {
   if (str === undefined) {
     return "";
   }
-  if(["nueve", "9"].some((n) => str.includes(n))) {
+  if(["nueve", "9"].some((n) => str.endsWith(n))) {
     return "el culo te llueve";
-  } else if(["ocho", "8"].some((n) => str.includes(n))) {
+  } else if(["ocho", "8"].some((n) => str.endsWith(n))) {
     return "el culo te abrocho";
+  } else if(["video"].some((n) => str.endsWith(n))) {
+    return "el de tu culo y mi fideo";
+  } else if(["foto"].some((n) => str.endsWith(n))) {
+    return "la de tu culo y mi choto";
+  } else if(["fiesta"].some((n) => str.endsWith(n))) {
+    return "la de tu culo y esta";
+  } else if(["marcelo", "Marcelo"].some((n) => str.endsWith(n))) {
+    return "agachate y conocelo";
+  } else if(["jose", "Jose"].some((n) => str.endsWith(n))) {
+    return "el que te la puso y se fue";
   }
   else return "";
 }
