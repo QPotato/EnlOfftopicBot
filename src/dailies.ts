@@ -24,7 +24,7 @@ const lunesAlFin: DailyMotive = {
 
 // const lunesDeLucio: DailyMotive = {
 //     name: "Lunes de Lucio",
-//     action: () => 
+//     action: () =>
 // };
 
 const martesDeMusica: DailyMotive = {

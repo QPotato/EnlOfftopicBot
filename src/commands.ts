@@ -99,22 +99,27 @@ const commands: Command[] = [
     pattern: /\/macrisis/,
     action: msg => {
       const chatId = msg.chat.id;
-      const url_dolar = 'https://api.estadisticasbcra.com/usd_of_minorista';
+      const url_dolar = 'https://mercados.ambito.com//dolar/oficial/variacion';
       const url_leliqs = 'https://api.estadisticasbcra.com/tasa_leliq';
+      var bot_answer = "";
       Promise.all([
-        request(url_dolar, {
+        request(url_dolar)
+          .then(resp => {
+              const dolar = JSON.parse(resp);
+              bot_answer += `Dolar: $${dolar.venta} (${dolar.fecha})\n`;
+          })
+          .catch(error => {
+              console.log(error);
+              bot.sendMessage(
+                chatId,
+                "Error de comunicación con el Banco Central."
+              );
+          }),
+      request(url_leliqs, {
           headers: { Authorization: 'BEARER ' + brcatoken }
-        }),
-        request(url_leliqs, {
-          headers: { Authorization: 'BEARER ' + brcatoken }
-        })
-      ])
-        .then(values => {
-          const values2 = values.map(body => JSON.parse(body).pop().v);
-          bot.sendMessage(
-            chatId,
-            `Dolar: $${values2[0]} (último cierre)\nLELIQs: ${values2[1]}%`
-          );
+        }).then(resp => {
+          const leliqs = JSON.parse(resp).pop().v;
+          bot_answer += `LELIQs: ${leliqs}%`;
         })
         .catch(error => {
           console.log(error);
@@ -122,7 +127,13 @@ const commands: Command[] = [
             chatId,
             "Error de comunicación con el Banco Central."
           );
-        });
+        })
+      ]).then(() => {
+        bot.sendMessage(
+          chatId,
+          bot_answer
+        );
+      })
     }
   }
 ];
