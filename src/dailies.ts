@@ -22,10 +22,10 @@ const lunesAlFin: DailyMotive = {
     action: () => simpleMessage("Hora de volvernos miembros productivos de la sociedad de nuevo. Una sonsira y a producir.")
 };
 
-// const lunesDeLucio: DailyMotive = {
-//     name: "Lunes de Lucio",
-//     action: () =>
-// };
+const lunesDeLucio: DailyMotive = {
+    name: "Lunes de Lucio",
+    action: () => {},
+};
 
 const martesDeMusica: DailyMotive = {
     name: "Martes de Música 🎵",
@@ -60,18 +60,13 @@ const juevesDeBiblia: DailyMotive = {
     name: "Jueves de Biblia 🔖",
     action: () => sendSubLinks("absurd_bible_verses")
 }
-const viernesDeTetas: DailyMotive = {
-    name: "Viernes de Tetas (.)(.)",
-    action: () => sendSubLinks("tits")
-};
-
-const viernesDeVergas: DailyMotive = {
-    name: "Viernes de Vergas 🍆",
-    action: () => sendSubLinks("dicks")
+const viernesCensurado: DailyMotive = {
+    name: "Viernes Censurado",
+    action: () => simpleMessage("Aca habia contenido, pero fue editado para que Fede pueda poner links a este repositorio en su curriculum.")
 };
 
 const caturday: DailyMotive = {
-    name: "Caturday 🐱 ",
+    name: "Caturday 🐱",
     action: () => sendSubLinks("cats")
 };
 
@@ -88,11 +83,6 @@ const dominGol: DailyMotive = {
 const juanDomingoPeron: DailyMotive = {
     name: "Juan Domingo Peron",
     action: () => bot.sendAudio(OT_CHAT_ID, "marcha.mp3")
-};
-
-const domingoDeHuevos: DailyMotive = {
-    name: "Domingo de Huevos",
-    action: () => sendSubLinks("nutscaping")
 };
 
 const sendSubLinks = async (sub: string) => {
@@ -129,13 +119,13 @@ export default function doDailies() {
             dailyMotives = [juevesDeJuegos, juevesDeBiblia];
             break;
         case 5:
-            dailyMotives = [viernesDeTetas, viernesDeVergas];
+            dailyMotives = [viernesCensurado];
             break;
         case 6:
             dailyMotives = [caturday];
             break;
         case 7:
-            dailyMotives = [domingoRandom, dominGol, juanDomingoPeron, domingoDeHuevos];
+            dailyMotives = [domingoRandom, dominGol, juanDomingoPeron];
             break;
         default:
             dailyMotives = [];

@@ -45,14 +45,23 @@ const commands: Command[] = [
     name: 'reddit `nombre_de_un_subreddit`',
     help:
       "Envía un link de un post al azar entre los trendings actuales del subreddit.",
-    pattern: /\/reddit (.+)/,
+    pattern: /\/reddit (\w+)/,
     action: (msg, match) => {
       // Send random pics from last posts on given subreddit.
       const chatId = msg.chat.id;
+      var n_links: number;
       if (match === null) {
         bot.sendMessage(
           chatId,
           "Tenes que pasarme el nombre de un subreddit despues del comando.",
+          { reply_to_message_id: msg.message_id }
+        );
+        return;
+      }
+      if (match[1].toLocaleLowerCase() === 'sounding') {
+        bot.sendMessage(
+          chatId,
+          "AAAAAGH NO",
           { reply_to_message_id: msg.message_id }
         );
         return;
@@ -66,21 +75,85 @@ const commands: Command[] = [
             const links = posts
               .filter((p: any) => p.kind === 't3')
               .map((p: any) => p.data.url);
+            let r = Math.floor(Math.random() * links.length);
             if (links.length > 0) {
               bot.sendMessage(
                 chatId,
-                links[Math.floor(Math.random() * links.length)]
+                links[r]
               );
             } else {
               bot.sendMessage(
                 chatId,
-                'No encontré ese subreddit o no hay links en los últimos posts.'
+                'No hay links.'
               );
             }
           } else {
             bot.sendMessage(
               chatId,
-              'No encontré ese subreddit o no hay links en los últimos posts.'
+              'No encontré ese subreddit.'
+            );
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          bot.sendMessage(
+            chatId,
+            'No encontré ese subreddit o no hay links en los últimos posts.'
+          );
+        });
+    }
+  },
+  {
+    name: 'redditt `nombre_de_un_subreddit`',
+    help:
+      "Envía todos los links entre los trendings actuales del subreddit.",
+    pattern: /\/redditt (\w+)/,
+    action: (msg, match) => {
+      // Send random pics from last posts on given subreddit.
+      const chatId = msg.chat.id;
+      if (match === null) {
+        bot.sendMessage(
+          chatId,
+          "Tenes que pasarme el nombre de un subreddit despues del comando.",
+          { reply_to_message_id: msg.message_id }
+        );
+        return;
+      }
+      if (match[1].toLocaleLowerCase() === 'sounding') {
+        bot.sendMessage(
+          chatId,
+          "AAAAAGH NO",
+          { reply_to_message_id: msg.message_id }
+        );
+        return;
+      }
+      const url = 'https://www.reddit.com/r/' + match[1] + '/hot.json';
+      request(url)
+        .then(body => {
+          const sub = JSON.parse(body);
+          if ('data' in sub) {
+            const posts = sub.data.children;
+            const links = posts
+              .filter((p: any) => p.kind === 't3')
+              .map((p: any) => p.data.url);
+            for (let index = 0; index < 20; index++) {
+              if (links.length > 0) {
+                bot.sendMessage(
+                  chatId,
+                  links[index]
+                );
+              } else {
+                bot.sendMessage(
+                  chatId,
+                  'No hay links.'
+                );
+                break;
+              }
+            }
+          } else {
+            bot.sendMessage(
+              chatId,
+              'No encontré ese subreddit.'
             );
           }
         })

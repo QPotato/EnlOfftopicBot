@@ -1,57 +1,52 @@
-import * as TelegramBot from 'node-telegram-bot-api';
-import * as Schedule from 'node-schedule';
- 
-import mongo from './db';
-import commands from './commands';
-import reactions from './reactions';
-import necromancy from './necromancy'
-import doDailies from './dailies'
+import * as TelegramBot from "node-telegram-bot-api";
+import * as Schedule from "node-schedule";
+
+import mongo from "./db";
+import commands from "./commands";
+import reactions from "./reactions";
+import necromancy from "./necromancy";
+import doDailies from "./dailies";
 
 const OT_NAC_CHAT_ID = -1001211558559;
 const OT_ROS_CHAT_ID = -1001302166698;
 
-
 const init = async () => {
   // Connect the DB
   await mongo.connect();
-  if (mongo.db === undefined)
-    throw new Error('Could not connect to mongodb')
+  if (mongo.db === undefined) throw new Error("Could not connect to mongodb");
 
   // Create the telegram bot
   if (process.env.TELEGRAM === undefined)
-    throw new Error('No telegram token in environment');
+    throw new Error("No telegram token in environment");
   const telegramtoken = process.env.TELEGRAM;
   const bot = new TelegramBot(telegramtoken, { polling: true });
-  
+
   // Bot should answer as a command if the text matches a command pattern.
-  commands.forEach((cmd) => {
+  commands.forEach(cmd => {
     bot.onText(cmd.pattern, cmd.action);
   });
 
-  bot.on('message', (msg: TelegramBot.Message) => {
+  bot.on("message", (msg: TelegramBot.Message) => {
     // We store all messages.
-    mongo.db.collection('messages').insertOne(msg);
+    mongo.db.collection("messages").insertOne(msg);
 
     // React to a message with the first that matches the pattern.
-    for(const reaction of reactions) {
-      if(reaction.pattern(msg)) {
+    for (const reaction of reactions) {
+      if (reaction.pattern(msg)) {
         reaction.action(msg);
         break;
       }
     }
-
   });
 
   // If the OT chat dies, resurrect it.
   // necromancy(OT_NAC_CHAT_ID);
   // necromancy(OT_ROS_CHAT_ID);
-  
+
   var rule = new Schedule.RecurrenceRule();
   rule.hour = 11;
   rule.minute = 0;
-  Schedule.scheduleJob(rule, doDailies, );
-}
+  Schedule.scheduleJob(rule, doDailies);
+};
 
-init()
-
-OT_ROS_CHAT_ID
+init();
