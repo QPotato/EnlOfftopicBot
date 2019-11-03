@@ -11,7 +11,6 @@ const bot = new TelegramBot(telegramtoken);
 
 const mensajes_idle : string[] = [
   "El grupo esta muerto. @PansitoPan, sabés que hacer.",
-  "Che, yo no puedo generar spam nuevo. Soy un bot. Mis respuestas son todas preprogramadas. Si ustedes no hablan el grupo muere.",
   "Tengo un plan para una OP. Necesito un agente en Misiones que... Uh, perdon, grupo equivocado.",
   "Que comieron hoy?",
   "Me aburro. Que hacen?",
@@ -35,21 +34,9 @@ const necroposts : Necropost[] = [
 
 
 const necromancy = async (chatId: number) => {
-  // If it's late night time in Argentina, do nothing.
-  await (async () => {
-    if((new Date()).getUTCHours() - 3 < 8)
-      return;
-
-    // If chat has recent activity, do nothing
-    // TODO: find better way of accesing this only message.
-    const lastMessage = await mongo.db.collection('messages').findOne({'chat.id': chatId}, {sort: {date: -1}});
-    if(Date.now() - lastMessage.date > 5 * 60 * 60 * 1000)
-      return;
-
-    // Choose a random necroposting function and execute it.
-    const necropost = necroposts[Math.floor(Math.random() * necroposts.length)];
-    necropost(chatId);
-  })();
+  // Choose a random necroposting function and execute it.
+  const necropost = necroposts[Math.floor(Math.random() * necroposts.length)];
+  necropost(chatId);
 
   // Set a timeout somewhere < 24 hours to practice necromancy again.
   await Timeout.set(Math.random() * 24 * 60 * 60 * 1000)

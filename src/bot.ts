@@ -40,8 +40,7 @@ const init = async () => {
   });
 
   // If the OT chat dies, resurrect it.
-  // necromancy(OT_NAC_CHAT_ID);
-  // necromancy(OT_ROS_CHAT_ID);
+  necromancy(OT_NAC_CHAT_ID);
 
   var rule = new Schedule.RecurrenceRule();
   rule.hour = 11;
