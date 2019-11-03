@@ -106,6 +106,9 @@ export default function doDailies() {
     const day = new Date().getDay();
     var dailyMotives: DailyMotive[]
     switch (day) {
+        case 0:
+            dailyMotives = [domingoRandom, dominGol, juanDomingoPeron];
+            break;
         case 1:
             dailyMotives = [lunesAlFin, lunesDeMierda];
             break;
@@ -123,9 +126,6 @@ export default function doDailies() {
             break;
         case 6:
             dailyMotives = [caturday];
-            break;
-        case 7:
-            dailyMotives = [domingoRandom, dominGol, juanDomingoPeron];
             break;
         default:
             dailyMotives = [];

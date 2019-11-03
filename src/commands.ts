@@ -5,6 +5,7 @@
 import * as FS from "fs";
 import * as TelegramBot from 'node-telegram-bot-api';
 import * as request from 'request-promise';
+import mongo from "./db";
 
 interface Command {
   name: string;
@@ -42,6 +43,21 @@ const commands: Command[] = [
     }
   },
   {
+    name: 'random_msg',
+    help: 'mensaje al azar de la db',
+    pattern: /\/random_msg/,
+    action: async msg => {
+      // Send a random ENL song
+      const chatId = msg.chat.id;
+      const query = { state: 'OK' };
+      const n = await mongo.db.collection("messages").count(query);
+      const r = Math.floor(Math.random() * n);
+      const randomElement = await mongo.db.collection("messages").find(query).limit(1).skip(r).next();
+
+      bot.sendMessage(chatId, randomElement.text, { parse_mode: 'Markdown' });
+    }
+  },
+  {
     name: 'reddit `nombre_de_un_subreddit`',
     help:
       "Envía un link de un post al azar entre los trendings actuales del subreddit.",
@@ -58,7 +74,7 @@ const commands: Command[] = [
         );
         return;
       }
-      if (match[1].toLocaleLowerCase() === 'sounding') {
+      if (match[1].toLocaleLowerCase() === 'sounding' || match[1].toLocaleLowerCase() === 'peehole') {
         bot.sendMessage(
           chatId,
           "AAAAAGH NO",
@@ -119,7 +135,7 @@ const commands: Command[] = [
         );
         return;
       }
-      if (match[1].toLocaleLowerCase() === 'sounding') {
+      if (match[1].toLocaleLowerCase() === 'sounding' || match[1].toLocaleLowerCase() === 'peehole') {
         bot.sendMessage(
           chatId,
           "AAAAAGH NO",

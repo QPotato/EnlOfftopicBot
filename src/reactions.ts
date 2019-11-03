@@ -1,4 +1,6 @@
 import * as TelegramBot from 'node-telegram-bot-api';
+import mongo from "./db";
+
 
 const telegramtoken = process.env.TELEGRAM || "NoToken";
 const bot = new TelegramBot(telegramtoken);
@@ -76,7 +78,6 @@ const respuestas_especificas: {[key: string] : string[]} = {
   pansitopan: ["No, no, no. Bueno, sí.", "mmm, cereal."],
   quanticpotato: ["Tiene razón.", "Mi creador habla con sabiduría nuevamente.", "Escuchen a Fede, tiene razon.", "Yo estoy de acuerdo."],
   dimekari: ["Hola hermosa.", "Pasame pack Kari, quiero ver ese codigo.", "Apa, una linda bot. Hola, me llamo EnlOfftopicBot. Queres ver mi codigo?"],
-  
 };
 
 const respuestas_random : string[] = [
@@ -84,26 +85,33 @@ const respuestas_random : string[] = [
   "Sí.",
   "No.",
   "Puede ser, eh..",
-  "Y si jugás un poco de Ingress? Digo nomás...",
-  "Y como viene el score de tu celda?",
-  "Vos decís?",
   "O sea, técnicamente tenés razón, pero como lo decís vos probablemente sea una pavada.",
   "Esto es importante!",
-  "Después de leer esto, quiero que alguien me apague. Para siempre.",
-  "No te creo.",
   "Miren que leí muchas pavadas en este grupo pero esto...",
   "Pero que PELOTUDES que acabo de leer.",
-  "Donde están les admins? Ban por favor.",
   "No rompás las pelotas, por favor.",
   "Y a nosotros por qué nos importa?",
   "Jajajajaja. No.",
-  "Y si mejor te callás?",
-  "Podemos armar otro grupo sin esta persona?",
   "Ignoren este mensaje y capaz se aburre.",
   "Kari mata a %first_name",
-  "Nunca conocí a alguien mas pavo que %first_name",
   "¿Podemos sacar del grupo a %first_name?",
-  "¿Quien metió a %first_name en este grupo?"
+  "¿Quien metió a %first_name en este grupo?",
+  "MOSTRAME 1 CUARTO DE TETA POR FAVOR",
+  "Creo que te equivocas",
+  "Pa que quieres saber eso jaja salu2",
+  "Creo que tengo la respuesta en la base de datos, banca.",
+  "Sabela",
+  "Al toque",
+  "Ke zukulemto",
+  "Re que no",
+  "...",
+  "Ya empezó a decir pelotudeces...",
+  "Te entiendo...",
+  "Esto me parece nefasto",
+  "%first_name, sos la axila del grupo",
+  "Te odio %first_name",
+  "Te quiero %first_name",
+  "Me caes mal"
 ]
 
 function numReact(str: string | undefined) {
@@ -124,6 +132,8 @@ function numReact(str: string | undefined) {
     return "agachate y conocelo";
   } else if(["jose", "Jose"].some((n) => str.endsWith(n))) {
     return "el que te la puso y se fue";
+  } else if(["Mauricio"].some((n) => str.endsWith(n))) {
+    return "el que te aumento los servicios";
   }
   else return "";
 }
