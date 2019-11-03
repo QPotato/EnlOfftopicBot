@@ -1,12 +1,11 @@
 import * as TelegramBot from 'node-telegram-bot-api';
 import mongo from "./db";
 
-
 const telegramtoken = process.env.TELEGRAM || "NoToken";
 const bot = new TelegramBot(telegramtoken);
 
 const OT_CHAT_ID = -1001211558559;
-const p = 0.02;
+const p = 0.015;
 
 interface Reaction {
   pattern: (msg: TelegramBot.Message) => boolean;
@@ -14,11 +13,6 @@ interface Reaction {
 }
 
 const reactions: Reaction[] = [
-  {
-    // don't answer to this user
-    pattern: (msg) => msg.from !== undefined && msg.from.username === "ClaryC",
-    action: (msg) => null
-  },
   {
     // Don't answer to commands.
     pattern: (msg) => msg.text !== undefined && msg.text.startsWith("/"),
@@ -68,6 +62,21 @@ const reactions: Reaction[] = [
         : respuestas_random;
       const respuesta = respuestas[Math.floor(Math.random() * respuestas.length)].replace("%first_name", msg.from.first_name);
       bot.sendMessage(chatId, respuesta, { reply_to_message_id: msg.message_id });
+    },
+  },
+  {
+    // Or send a random message from DB.
+    pattern: (msg) => Math.random() < p,
+    action: async (msg) => {
+      const chatId = msg.chat.id;
+      if(msg.from === undefined || msg.from.username === undefined) return; //TODO: find a better way to type this
+      // Send a random ENL song
+      const query = {"chat.id": OT_CHAT_ID, text: { "$exists": true}};
+      const n = await mongo.db.collection("messages").count(query);
+      const r = Math.floor(Math.random() * n);
+      const randomElement = await mongo.db.collection("messages").find(query).limit(1).skip(r).next();
+      console.log(randomElement);
+      bot.sendMessage(chatId, randomElement.text, { parse_mode: 'Markdown' });
     },
   }
 ]
